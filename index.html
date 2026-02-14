@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pregunta Especial</title>
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+
+.card {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: fadeIn 1.5s ease;
+    position: relative;
+    z-index: 1;
+}
+
+h1 { font-size: 2.2rem; margin-bottom: 10px; }
+p { font-size: 1.2rem; color: #444; }
+button {
+    margin: 15px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+}
+#yes { background: #ff4d6d; color: white; }
+#yes:hover { transform: scale(1.1); background: #ff1e4d; }
+#no { background: #ddd; }
+#no:hover { position: absolute; left: calc(10% + 80% * Math.random()); }
+
+.heart {
+    position: absolute;
+    color: rgba(255, 77, 109, 0.7);
+    font-size: 20px;
+    animation: float 6s linear forwards;
+    pointer-events: none;
+}
+
+@keyframes float {
+    from { transform: translateY(100vh) scale(0); opacity: 1; }
+    50% { transform: scale(1); opacity: 1; }
+    to { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+#contadorTiempo {
+    color: #ff4d6d;
+    font-weight: bold;
+    margin-top: 15px;
+    font-size: 1.2rem;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h1>💘 Tengo una pregunta especial 💘</h1>
+    <!-- FOTO -->
+    <img src="foto1.jpg" alt="Nuestra foto" style="width:250px;border-radius:20px;margin:20px;box-shadow:0 10px 25px rgba(0,0,0,0.3);">
+    
+    <!-- FECHA -->
+    <p style="font-size:20px;">Juntos desde el <b>20 de diciembre de 2024</b> ❤️</p>
+    <p>Desde que llegaste, todo se siente más divertido.</p>
+    <p>¿Quieres ser mi San Valentín? 💝</p>
+
+    <button id="yes" onclick="celebrate()">Sí 💖</button>
+    <button id="no" onmouseover="moveButton()">No 😅</button>
+</div>
+
+<audio id="music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// Botón "No" que se mueve
+function moveButton() {
+    const btn = document.getElementById('no');
+    const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+    const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+    btn.style.position = 'absolute';
+    btn.style.left = x + 'px';
+    btn.style.top = y + 'px';
+}
+
+// Contador romántico
+const fechaInicio = new Date("2024-12-20T00:00:00");
+setInterval(()=>{
+    const ahora = new Date();
+    let años = ahora.getFullYear() - fechaInicio.getFullYear();
+    let meses = ahora.getMonth() - fechaInicio.getMonth();
+    let dias = ahora.getDate() - fechaInicio.getDate();
+
+    if(dias < 0){
+        meses--;
+        const ultimoMes = new Date(ahora.getFullYear(), ahora.getMonth(), 0);
+        dias += ultimoMes.getDate();
+    }
+
+    if(meses < 0){
+        años--;
+        meses += 12;
+    }
+
+    const mensaje = `Llevamos ${años} años, ${meses} meses y ${dias} días juntos ❤️<br>Y siguen siendo los mejores días de mi vida 💖`;
+
+    if(!document.getElementById('contadorTiempo')){
+        const contador = document.createElement('p');
+        contador.id = 'contadorTiempo';
+        document.querySelector('.card').appendChild(contador);
+    }
+    document.getElementById('contadorTiempo').innerHTML = mensaje;
+
+},1000);
+
+// Función celebrar - segunda carta romántica
+function celebrate() {
+    document.getElementById('music').play();
+
+    // Crear segunda carta romántica
+    const newCard = document.createElement('div');
+    newCard.className = 'card';
+    newCard.style.position = 'absolute';
+    newCard.style.top = '50%';
+    newCard.style.left = '50%';
+    newCard.style.transform = 'translate(-50%, -50%)';
+    newCard.style.zIndex = '5';
+    newCard.style.padding = '40px';
+    newCard.style.textAlign = 'center';
+    newCard.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+    newCard.style.borderRadius = '25px';
+    newCard.style.background = 'white';
+    newCard.innerHTML = `
+        <h1>🎉 Sabía que dirías que sí 🎉</h1>
+        <p>Bibita, desde que llegaste a mi vida<br>
+        cada día se siente más especial 💖<br>
+        Gracias por hacerme sonreír siempre 😍</p>
+    `;
+    document.body.appendChild(newCard);
+
+    // Corazones flotando
+    for(let i=0; i<60; i++){
+        setTimeout(createHeart, i*80);
+    }
+
+    // Gran corazón central
+    createBigHeart();
+}
+
+// Corazones flotando
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = '❤️';
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+}
+
+// Gran corazón central con latido
+function createBigHeart() {
+    const bigHeart = document.createElement('div');
+    bigHeart.innerHTML = '❤️';
+    bigHeart.style.position = 'absolute';
+    bigHeart.style.top = '50%';
+    bigHeart.style.left = '50%';
+    bigHeart.style.transform = 'translate(-50%, -50%)';
+    bigHeart.style.fontSize = '120px';
+    bigHeart.style.opacity = '0.8';
+    bigHeart.style.zIndex = '6';
+    document.body.appendChild(bigHeart);
+
+    bigHeart.animate([
+        { transform: 'translate(-50%, -50%) scale(1)' },
+        { transform: 'translate(-50%, -50%) scale(1.2)' },
+        { transform: 'translate(-50%, -50%) scale(1)' }
+    ], {
+        duration: 800,
+        iterations: Infinity
+    });
+}
+</script>
+</body>
+</html>
